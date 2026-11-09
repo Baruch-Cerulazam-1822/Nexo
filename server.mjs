@@ -38,7 +38,7 @@ const server = createServer(async (req, res) => {
       const response = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
         method: 'POST',
         headers: { 'x-goog-api-key': process.env.GEMINI_API_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: process.env.GEMINI_MODEL || 'gemini-3.6-flash', system_instruction: instructions, input: conversationText, generation_config: { max_output_tokens: 700 }, store: false })
+        body: JSON.stringify({ model: process.env.GEMINI_MODEL || 'gemini-3.6-flash', system_instruction: instructions, input: conversationText, generation_config: { max_output_tokens: 1000 }, store: false })
       });
       const data = await response.json();
       if (!response.ok) {

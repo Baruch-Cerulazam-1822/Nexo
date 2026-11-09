@@ -47,7 +47,13 @@ const server = createServer(async (req, res) => {
         return res.end(JSON.stringify({ error: 'Não consegui gerar a resposta agora. Tente de novo em instantes.' }));
       }
       res.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
-      const answer = data.output_text || data.outputs?.map((item) => item.text || '').filter(Boolean).join('\n');
+      const answer = data.steps
+  ?.filter((step) => step.type === 'model_output')
+  .flatMap((step) => step.content || [])
+  .filter((block) => block.type === 'text')
+  .map((block) => block.text || '')
+  .join('\n')
+  .trim();
       return res.end(JSON.stringify({ answer: answer || 'Não consegui montar uma resposta. Pode perguntar de outro jeito?' }));
     } catch (error) {
       res.writeHead(400, { 'content-type': 'application/json; charset=utf-8' });
